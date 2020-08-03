@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Receiver161
 {
@@ -20,6 +22,7 @@ namespace Receiver161
 
         private void InitializeComponent()
         {
+            //margins
             var myThickness = new Thickness(10);
             this.Margin= myThickness;
             
@@ -36,36 +39,41 @@ namespace Receiver161
             this.ColumnDefinitions.Add(colDef2);
             colDef2.Width = new GridLength(0.1, GridUnitType.Star);
 
+            //header
             TextBox txt = new TextBox();
             txt.IsReadOnly = true;
             txt.Text = header;
             Grid.SetRow(txt, 0);
             Grid.SetColumn(txt, 0);
 
+            //button info
             Button btn = new Button();
             btn.Content = "i";
             Grid.SetRow(btn, 0);
             Grid.SetColumn(btn, 1);
+            btn.Click += Button_click;
+
+
+            //explanation
+            TextBox txt1 = new TextBox();
+            txt1.IsReadOnly = true;
+            txt1.Text = explanation;
+            Grid.SetRow(txt1, 1);
+            Grid.SetColumnSpan(txt1, 2);
+            txt1.Visibility = Visibility.Collapsed;
 
             this.Children.Add(txt);
             this.Children.Add(btn);
+            this.Children.Add(txt1);
 
-            btn.MouseEnter += Button_enter;
-            btn.MouseLeave += Button_leave;
         }
 
-        private void Button_enter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void Button_click(object sender, RoutedEventArgs e)
         {
-            TextBox text = new TextBox();
-            text.Text = explanation;
-            Grid.SetRow(text, 1);
-            Grid.SetColumnSpan(text, 2);
-            ((MessageGrid)((Button)sender).Parent).Children.Add(text);
-        }
+            var explanation = ((MessageGrid)((Button)sender).Parent).Children[2];
 
-        private void Button_leave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            ((MessageGrid)((Button)sender).Parent).Children.RemoveAt(2);
+            explanation.Visibility =
+                (explanation.IsVisible) ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }
