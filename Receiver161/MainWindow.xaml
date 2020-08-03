@@ -4,13 +4,21 @@
         Title="" Height="400" Width="600">
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.2*"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
+        <TextBox 
+            Grid.Row="0"
+            Margin="50 10"
+            VerticalAlignment="Center"
+            Tag="Search...">
+                
+        </TextBox>
+        
         <ScrollViewer Grid.Row="1" >
             <StackPanel x:Name="stackPanel">
             </StackPanel>

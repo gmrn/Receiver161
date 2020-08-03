@@ -28,9 +28,10 @@ namespace Receiver161
                 msgs = JsonConvert.DeserializeObject<List<MessageBody>>(fileText);
             }
 
-            for (int i=0; i<5; i++)
+            for (int i=0; i< msgs.Count; i++)
             {
-                stackPanel.Children.Add(new MessageGrid(msgs[i].header, msgs[i].explanation));
+                if (msgs[i].header != null)
+                    stackPanel.Children.Add(new MessageGrid(msgs[i].header, msgs[i].explanation));
             }
         }
     }
