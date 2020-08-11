@@ -30,5 +30,15 @@ namespace Receiver161
             explanation.Visibility =
                 (explanation.IsVisible) ? Visibility.Collapsed : Visibility.Visible;
         }
+
+        private void Mouse_Enter(object sender, MouseEventArgs e)
+        {
+            ((Grid)sender).Background = (Brush)Application.Current.FindResource("SelectedRequestColorBrush");
+        }
+
+        private void Mouse_Leave(object sender, MouseEventArgs e)
+        {
+            ((Grid)sender).Background = (Brush)Application.Current.FindResource("RequestColorBrush");
+        }
     }
 }
