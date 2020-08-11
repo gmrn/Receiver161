@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,29 +23,35 @@ namespace Receiver161
     /// </summary>
     public partial class PanelSearch : UserControl
     {
-        private readonly string hPATH = $"{Environment.CurrentDirectory}\\headers.json";
+        //private readonly string hPATH = $"{Environment.CurrentDirectory}\\headers.json";
+        ApplicationContext db;
 
         public PanelSearch()
         {
             InitializeComponent();
-            var msgs = new List<MessageBody>();
 
-            using (var reader = File.OpenText(hPATH))
-            {
-                var fileText = reader.ReadToEnd();
-                msgs = JsonConvert.DeserializeObject<List<MessageBody>>(fileText);
-            }
+            db = new ApplicationContext();
+            db.Messages.Load();
+            this.DataContext = db.Messages.Local.ToBindingList();
 
-            for (int i = 0; i < msgs.Count; i++)
-            {
-                if (msgs[i].header != null)
-                {
-                    var request = new Request();
-                    request.header.Text = msgs[i].header;
-                    request.explanation.Text = msgs[i].explanation;
-                    stackPanel.Children.Add(request);
-                }
-            }
+            //var msgs = new List<MessageBody>();
+
+            //using (var reader = File.OpenText(hPATH))
+            //{
+            //    var fileText = reader.ReadToEnd();
+            //    msgs = JsonConvert.DeserializeObject<List<MessageBody>>(fileText);
+            //}
+
+            //for (int i = 0; i < msgs.Count; i++)
+            //{
+            //    if (msgs[i].header != null)
+            //    {
+            //        var request = new Request();
+            //        request.header.Text = msgs[i].header;
+            //        request.explanation.Text = msgs[i].explanation;
+            //        stackPanel.Children.Add(request);
+            //    }
+            //}
         }
     }
 }

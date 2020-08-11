@@ -41,8 +41,7 @@
 
         <StackPanel
             Grid.Column="1"
-            Background="PaleVioletRed"
-            Visibility="Collapsed"/>
+            Background="PaleVioletRed"/>
 
     </Grid>
 </Window>

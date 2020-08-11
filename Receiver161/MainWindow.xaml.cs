@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Data.Entity;
 using System.Windows.Media;
 
 namespace Receiver161
@@ -19,6 +20,9 @@ namespace Receiver161
         public MainWindow()
         {
             InitializeComponent();
+
+
+
             //Cover.Width = Grid.Width * 0.9 - PanelMessage.Width;
         }
 

@@ -25,10 +25,23 @@
 
         </TextBox>
 
-        <ScrollViewer Grid.Row="1" >
-            <StackPanel x:Name="stackPanel">
 
+        <!--<ScrollViewer Grid.Row="1" >
+            <StackPanel x:Name="stackPanel">
+                <TextBlock Text="{Binding Title}" FontSize="16" />
+                <TextBlock Text="{Binding Text}" FontSize="12" />
             </StackPanel>
-        </ScrollViewer>
+        </ScrollViewer>-->
+
+        <ListBox Grid.Row="1" ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Title}" FontSize="16" />
+                        <TextBlock Text="{Binding Text}" FontSize="13" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

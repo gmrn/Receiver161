@@ -20,6 +20,9 @@ namespace Receiver161
     /// </summary>
     public partial class Request : UserControl
     {
+        public TextBox title { get; set; }
+        public TextBox text { get; set; }
+
         public Request()
         {
             InitializeComponent();
