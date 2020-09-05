@@ -7,6 +7,8 @@ namespace Receiver161
         public ApplicationContext() : base("DefaultConnection")
         {
         }
+
         public DbSet<Message> Messages { get; set; }
+        //public DbSet<Content> Contents { get; set; }
     }
 }

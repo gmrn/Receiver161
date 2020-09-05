@@ -37,8 +37,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock Text="{Binding Title}" FontSize="16" />
-                        <TextBlock Text="{Binding Text}" FontSize="13" />
+                        <local:Request Title="{Binding Title}" Width="550"></local:Request>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

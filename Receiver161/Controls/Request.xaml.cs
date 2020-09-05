@@ -20,8 +20,22 @@ namespace Receiver161
     /// </summary>
     public partial class Request : UserControl
     {
-        public TextBox title { get; set; }
-        public TextBox text { get; set; }
+        //public string Title { get; set; }
+        //public string Text { get; set; }
+
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(UserControl), new FrameworkPropertyMetadata(null));
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(UserControl), new FrameworkPropertyMetadata(null));
+
+        public string Title
+        {
+            get { return header.Text; }
+            set { SetValue(TitleProperty, value); }
+        }
+        public string Text
+        {
+            get { return header.Text; }
+            set { SetValue(TextProperty, value); }
+        }
 
         public Request()
         {

@@ -113,10 +113,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Panels\UserControl1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Styles\Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -134,6 +130,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="db\ApplicationContext.cs" />
+    <Compile Include="db\Content.cs" />
     <Compile Include="db\Message.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -152,9 +149,9 @@
     <Compile Include="Panels\PanelSearch.xaml.cs">
       <DependentUpon>PanelSearch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Panels\UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="PortServ\PortServ.cs" />
+    <Compile Include="PortServ\Reciever.cs" />
+    <Compile Include="PortServ\Transmitter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
