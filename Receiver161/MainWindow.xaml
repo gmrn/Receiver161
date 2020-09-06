@@ -12,36 +12,15 @@
             <ColumnDefinition Width="0.1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <local:PanelSearch x:Name="PanelSearch"
-            Grid.Column="0"
-            HorizontalAlignment="Left"
-            Width="600"
-            MouseDoubleClick="PanelSearch_MouseDoubleClick"/>
-
-        <!--<local:UserControl1
-            Grid.Column="0"
-            x:Name="PanelMessage"
-            HorizontalAlignment="Right"
-
-            Height="400"/>-->
-
-        <local:PanelSearch x:Name="PanelMessage"
-            Grid.Column="0"
-            HorizontalAlignment="Right"
-            Width="600"
-            MouseDoubleClick="PanelSearch_MouseDoubleClick"/>
-
-        <local:Cover x:Name="Cover"
-            Grid.Column="0"
-            HorizontalAlignment="Left" 
-            Panel.ZIndex="0" MouseDoubleClick="Cover_MouseDoubleClick"
-            Width="300">
-
-        </local:Cover>
-
-        <StackPanel
-            Grid.Column="1"
-            Background="PaleVioletRed"/>
+        <ListBox Grid.Row="0" ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Title}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
     </Grid>
 </Window>
