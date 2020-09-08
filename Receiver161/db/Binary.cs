@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Receiver161
 {
-    [Table("Contents")]
-    public class Content
+    [Table("Binaries")]
+    public class Binary
     {
         public int Id { get; set; }
-        public int Number { get; set; }
         public string Title { get; set; }
-        public string Type { get; set; }
+        public string Rule { get; set; }
+        public int Number_bit { get; set; }
     }
 }

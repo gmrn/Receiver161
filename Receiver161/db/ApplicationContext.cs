@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 
 namespace Receiver161
 {
@@ -9,6 +10,9 @@ namespace Receiver161
         }
 
         public DbSet<Message> Messages { get; set; }
-        //public DbSet<Content> Contents { get; set; }
+        public DbSet<Content> Contents { get; set; }
+        public DbSet<Binary> Binaries { get; set; } 
+        public DbSet<Messages_Content> Messages_Contents { get; set; }
+
     }
 }
