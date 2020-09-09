@@ -99,7 +99,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\ContentItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\FrameContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NavigationList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -111,14 +119,21 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\ContentItem.xaml.cs">
+      <DependentUpon>ContentItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FrameContent.xaml.cs">
       <DependentUpon>FrameContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NavigationList.xaml.cs">
+      <DependentUpon>NavigationList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="db\ApplicationContext.cs" />
-    <Compile Include="db\Binary.cs" />
-    <Compile Include="db\Content.cs" />
-    <Compile Include="db\Messages_Content.cs" />
-    <Compile Include="db\Message.cs" />
+    <Compile Include="Models\Binary.cs" />
+    <Compile Include="Models\Content.cs" />
+    <Compile Include="Models\Contents_Binary.cs" />
+    <Compile Include="Models\Messages_Content.cs" />
+    <Compile Include="Models\Message.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

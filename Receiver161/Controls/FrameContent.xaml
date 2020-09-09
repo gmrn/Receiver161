@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Receiver161"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <Grid VerticalAlignment="Stretch"
           HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
@@ -14,13 +14,17 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+        
         <TextBlock x:Name="textBlock" 
-                   Text="SomeTitle"
-                   Margin="5 5" 
+                   Text="ContentTitle"
+                   Margin="20 5" 
                    FontSize="20"
                    TextWrapping="Wrap"
                    Grid.Row="0" >
         </TextBlock>
-        <Grid Grid.Row="1" Background="LightSeaGreen"></Grid>
+        
+        <ScrollViewer Grid.Row="1">
+            <StackPanel x:Name="stackPanel"></StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>
