@@ -9,32 +9,12 @@
         <Grid.RowDefinitions></Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.4*"></ColumnDefinition>
+            <ColumnDefinition Width="0.2*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <ListView x:Name="listView" Grid.Column="0" ItemsSource="{Binding}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock TextWrapping="Wrap">
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="ID={0} {1}">
-                                <Binding Path="Id" />
-                                <Binding Path="Title" />
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property = "Margin" Value="2"/>
-                    <EventSetter Event="MouseDoubleClick" Handler="Mouse_MouseDoubleClick" />
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
-        <!--<local:NavigationList Grid.Column="0" MouseDoubleClick="Mouse_MouseDoubleClick">
-        </local:NavigationList>-->
-
-        <local:FrameContent x:Name="frameContent" Grid.Column="1"></local:FrameContent>
+        <local:NavigationList x:Name="navigationList" Grid.Column="0"></local:NavigationList>
+        <local:ToolsPanel Grid.Column="1"></local:ToolsPanel>
+        <local:FrameContent x:Name="frameContent" Grid.Column="2"></local:FrameContent>
     </Grid>
 </Window>

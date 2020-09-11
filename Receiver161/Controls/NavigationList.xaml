@@ -6,24 +6,45 @@
              xmlns:local="clr-namespace:Receiver161"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ListView x:Name="listView" ItemsSource="{Binding}">
+    <!--<ListView x:Name="listView" Grid.Column="0" ItemsSource="{Binding}" SelectionMode="Single">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <TextBlock TextWrapping="Wrap">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="ID={0} {1}">
-                            <Binding Path="Id" />
-                            <Binding Path="Title" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                <TextBlock TextWrapping="Wrap" Text="{Binding Title}"></TextBlock>
             </DataTemplate>
         </ListView.ItemTemplate>
         <ListView.ItemContainerStyle>
             <Style TargetType="{x:Type ListViewItem}">
                 <Setter Property = "Margin" Value="2"/>
-                <!--<EventSetter Event="MouseDoubleClick" Handler="Mouse_MouseDoubleClick" />-->
+                <EventSetter Event="MouseDoubleClick" Handler="Mouse_MouseDoubleClick" />
             </Style>
         </ListView.ItemContainerStyle>
-    </ListView>
+    </ListView>-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="Content" 
+                   Grid.Row="0"
+                   Margin="2"
+                   FontSize="14"></TextBlock>
+
+        <ListView x:Name="listView" 
+                  Grid.Row="1"
+                  Grid.Column="0" ItemsSource="{Binding}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding Title}"></TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property = "Margin" Value="2"/>
+                    <EventSetter Event="MouseDoubleClick" Handler="Mouse_MouseDoubleClick" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+        
+    </Grid>
 </UserControl>

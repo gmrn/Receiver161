@@ -13,6 +13,7 @@ namespace Receiver161
     {
         [Key]
         public int Id { get; set; }
+        public int Id_messages { get; set; }
         public int Number { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }

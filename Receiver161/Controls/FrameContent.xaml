@@ -16,7 +16,6 @@
         <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
         
         <TextBlock x:Name="textBlock" 
-                   Text="ContentTitle"
                    Margin="20 5" 
                    FontSize="20"
                    TextWrapping="Wrap"

@@ -9,6 +9,7 @@ namespace Receiver161
         [Key]
         public int Id { get; set; }
         public string Title { get; set; }
-        public int IsRequest { get; set; }
+        public int Id_request { get; set; }
+        public int Id_response { get; set; }
     }
 }

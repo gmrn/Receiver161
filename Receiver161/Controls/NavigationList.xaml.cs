@@ -26,5 +26,13 @@ namespace Receiver161
             this.DataContext = db.Messages.Local.ToBindingList();
         }
 
+        private void Mouse_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //((this.Parent as Grid).Parent as MainWindow).frameContent.Show(sender);
+
+            var parent = (this.Parent as Grid).Parent as MainWindow;
+            parent.frameContent.Show(sender);
+        }
+
     }
 }
