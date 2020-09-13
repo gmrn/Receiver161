@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Receiver161"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ToolBarTray Orientation="Vertical">
+
     <ToolBar>
         <Button Margin="5" Content="update"></Button>
         <Button Margin="5" Content="edit"></Button>
@@ -15,5 +15,5 @@
         <Button Margin="5" Content="logger"></Button>
         <Button Margin="5" Content="clear memory"></Button>
     </ToolBar>
-    </ToolBarTray>
+
 </UserControl>

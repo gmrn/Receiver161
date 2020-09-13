@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace Receiver161
 {
-    [Table("Contents")]
-    public class Content
+    [Table("Bins_extended")]
+    public class Bin_extended
     {
         [Key]
         public int Id { get; set; }
-        public int Id_messages { get; set; }
-        public int Offset { get; set; }
-        public string Title { get; set; }
-        public string Type { get; set; }
+        public int Id_binaries { get; set; }
+        public string Text { get; set; }
+        public string Data { get; set; }
     }
 }

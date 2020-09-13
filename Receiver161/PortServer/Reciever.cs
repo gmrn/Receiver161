@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Receiver161
+namespace Receiver161.PortServer
 {
     class Reciever
     {
         private SerialPort port { get; set; }
 
+        public Reciever(){}
         public Reciever(SerialPort serialPort)
         {
             this.port = serialPort;
@@ -21,7 +22,7 @@ namespace Receiver161
             port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
         }
 
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        public void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort port = (SerialPort)sender;
 
@@ -42,13 +43,23 @@ namespace Receiver161
                 byte[] body_buff = new byte[lenght * 2];
                 port.Read(body_buff, 0, body_buff.Length);
 
-                new Task(() => decoder(body_buff));
+                //new Task(() => decoder(body_buff));
             }
         }
 
-        private void decoder(byte[] message)
+        public byte[] GetByteData(int id)
         {
-            //возвращаем расшифровку
+             byte[] value_arr = {
+                0x7f, 0x22,
+                0x08, 0x00, 0x04, 0x00,
+                0xF1, 0xC9, 0x9A, 0x3B,
+                0x14, 0x08, 0x05, 0x00,
+                0x00, 0x00, 0x00, 0x88,
+                0x6E, 0x89, 0xC4, 0xBE,
+                0x00, 0x00, 0xDE, 0x42,
+                0x00, 0x00, 0xA2, 0x2D };
+
+            return value_arr;
         }
     }
 

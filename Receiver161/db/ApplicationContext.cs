@@ -10,6 +10,7 @@ namespace Receiver161
         public DbSet<Message> Messages { get; set; }
         public DbSet<Content> Contents { get; set; }
         public DbSet<Binary> Binaries { get; set; } 
+        public DbSet<Bin_extended> Bins_extended { get; set; }
 
     }
 }

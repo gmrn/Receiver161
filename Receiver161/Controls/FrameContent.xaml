@@ -11,19 +11,23 @@
           HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
-        
+ 
+        <local:ToolsPanel Grid.Row="0"></local:ToolsPanel>
+ 
         <TextBlock x:Name="textBlock" 
                    Margin="20 5" 
                    FontSize="20"
                    TextWrapping="Wrap"
-                   Grid.Row="0" >
+                   Grid.Row="1" >
         </TextBlock>
-        
-        <ScrollViewer Grid.Row="1">
-            <StackPanel x:Name="stackPanel"></StackPanel>
+
+        <ScrollViewer Grid.Row="2">
+            <StackPanel x:Name="stackPanel"
+                        Margin="20 5"></StackPanel>
         </ScrollViewer>
     </Grid>
 </UserControl>

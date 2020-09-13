@@ -7,29 +7,36 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Receiver161
+namespace Receiver161.PortServer
 {
-    class PortServ
+    class Server
     {
         SerialPort serialPort { get; set; }
+        Transmitter transmitter { get; set; }
+
 
         public void Run()
         {
             serialPort = ChoosePorts();
             setConfig();
+            var reciever = new Reciever(serialPort);
+            transmitter = new Transmitter(serialPort);
 
             try
             {
                 serialPort.Open();
 
-                var threadReciever = new Thread(new ThreadStart(new Reciever(serialPort).Start));
-                var threadTransmitter = new Thread(new ThreadStart(new Transmitter(serialPort).Start));
+                while (true)
+                {
+                    serialPort.DataReceived += new SerialDataReceivedEventHandler(reciever.DataReceivedHandler);
+                }
+
+                //var threadReciever = new Thread(new ThreadStart(new Reciever(serialPort).Start));
+                //var threadTransmitter = new Thread(new ThreadStart(new Transmitter(serialPort).Start));
             }
             catch (Exception e)
             {
                 MessageBox.Show("ERROR: невозможно открыть порт:");
-                //MessageBox.Show("ERROR: невозможно открыть порт:" + e.ToString());
-
                 return;
             }
 

@@ -31,11 +31,14 @@
                    FontSize="14"></TextBlock>
 
         <ListView x:Name="listView" 
+                  BorderThickness="0"
                   Grid.Row="1"
-                  Grid.Column="0" ItemsSource="{Binding}">
+                  Grid.Column="0" ItemsSource="{Binding}" TabIndex="2147483643">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock TextWrapping="Wrap" Text="{Binding Title}"></TextBlock>
+                    <TextBlock TextWrapping="Wrap"
+                               Padding="20, 0, 0 , 0"
+                               Text="{Binding Title}"></TextBlock>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>

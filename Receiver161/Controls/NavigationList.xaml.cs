@@ -31,7 +31,7 @@ namespace Receiver161
             //((this.Parent as Grid).Parent as MainWindow).frameContent.Show(sender);
 
             var parent = (this.Parent as Grid).Parent as MainWindow;
-            parent.frameContent.Show(sender);
+            parent.frameContent.Сompose(sender);
         }
 
     }
