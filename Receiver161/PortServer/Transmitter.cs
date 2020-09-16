@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Receiver161.PortServer
 {
-    class Transmitter
+    public class Transmitter
     {
         private SerialPort port { get; set; }
 
@@ -23,8 +23,14 @@ namespace Receiver161.PortServer
 
         public void Send(string data)
         {
-            //преобразовать стринг в массив байтов
-            port.Write(data);
+            var str_buffer = data.Split(' ');
+            var buffer = new byte[str_buffer.Length];
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                buffer[i] = Byte.Parse(str_buffer[i]);
+            }
+
+            port.Write(buffer, 0, buffer.Length);
         }
 
         private byte[] GetWrapData(byte[] data)

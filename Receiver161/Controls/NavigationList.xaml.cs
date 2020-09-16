@@ -28,10 +28,10 @@ namespace Receiver161
 
         private void Mouse_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //((this.Parent as Grid).Parent as MainWindow).frameContent.Show(sender);
+            var item = (sender as ListViewItem).DataContext as Message;
 
             var parent = (this.Parent as Grid).Parent as MainWindow;
-            parent.frameContent.Сompose(sender);
+            parent.frameContent.Сompose(item);
         }
 
     }

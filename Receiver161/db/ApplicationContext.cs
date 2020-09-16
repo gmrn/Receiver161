@@ -11,6 +11,7 @@ namespace Receiver161
         public DbSet<Content> Contents { get; set; }
         public DbSet<Binary> Binaries { get; set; } 
         public DbSet<Bin_extended> Bins_extended { get; set; }
+        public DbSet<Request> Requests { get; set; }
 
     }
 }

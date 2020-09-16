@@ -8,15 +8,12 @@ using System.Threading.Tasks;
 
 namespace Receiver161
 {
-    [Table("Contents")]
-    public class Content
+    [Table("Requests")]
+    public class Request
     {
         [Key]
         public int Id { get; set; }
-        public int Id_messages { get; set; }
-        public int Offset { get; set; }
-        public string Title { get; set; }
-        public string Type { get; set; }
-        public string Meterage { get; set; }
+        public int Id_message { get; set; }
+        public string Data { get; set; }
     }
 }

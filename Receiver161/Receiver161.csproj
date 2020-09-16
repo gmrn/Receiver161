@@ -6,7 +6,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{29944611-15C2-4090-9C03-EF07D2C2E593}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Receiver161</RootNamespace>
     <AssemblyName>Receiver161</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -57,6 +57,9 @@
     <ApplicationIcon>
     </ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
@@ -72,6 +75,9 @@
     </Reference>
     <Reference Include="Syncfusion.SfInput.WPF, Version=18.2460.0.57, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.SfInput.WPF.18.2.0.57\lib\net46\Syncfusion.SfInput.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfProgressBar.WPF, Version=18.2460.0.57, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.SfProgressBar.WPF.18.2.0.57\lib\net46\Syncfusion.SfProgressBar.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.SfShared.WPF, Version=18.2460.0.57, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.SfShared.WPF.18.2.0.57\lib\net46\Syncfusion.SfShared.WPF.dll</HintPath>
@@ -96,6 +102,8 @@
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -153,6 +161,7 @@
     <Compile Include="db\ApplicationContext.cs" />
     <Compile Include="Models\Bin_extended.cs" />
     <Compile Include="Models\Binary.cs" />
+    <Compile Include="Models\Request.cs" />
     <Compile Include="Models\Content.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="MainWindow.xaml.cs">

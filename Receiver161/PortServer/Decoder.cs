@@ -14,12 +14,15 @@ namespace Receiver161.PortServer
     {
         ApplicationContext db;
 
-        public Decoder()
-        {
-            db = new ApplicationContext();
-        }
+        public Decoder() => db = new ApplicationContext();
 
-        public List<Tuple<string, string, string, string>> GetValueList(Message item, byte[] value_arr)
+        /// <summary>
+        /// Create and return list with values and data for to draw UI Element
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        internal List<Tuple<string, string, string, string>> GetListUIElements(Message item, byte[] data)
         {
             //get a data for a body's framecontent
             //LINQ request to db
@@ -33,7 +36,8 @@ namespace Receiver161.PortServer
 
             foreach (var tuple in _contents)
             {
-                var vOut = this.ParseType(value_arr, tuple.Type, tuple.Offset);
+                //output value
+                var vOut = this.ParseType(data, tuple.Type, tuple.Offset);
 
 
                 //add to list not BIN type
@@ -63,8 +67,8 @@ namespace Receiver161.PortServer
                 foreach (var temp_t in _contents1)
                 {
                     //boolArray to intArray
-                    var data = boolArray.Skip(temp_i).Take(temp_t.Length).ToArray();
-                    int[] int_data = ToIntArray(data);
+                    var bool_data = boolArray.Skip(temp_i).Take(temp_t.Length).ToArray();
+                    int[] int_data = ToIntArray(bool_data);
 
                     //To String
                     string s = string.Join("", int_data);
@@ -92,6 +96,119 @@ namespace Receiver161.PortServer
             return list;
         }
 
+        /// <summary>
+        /// Decode byte line ane return list with values
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        internal List<string> GetListValues(Message item, byte[] data)
+        {
+            var m_contents = from m in db.Messages
+                            join c in db.Contents on m.Id equals c.Id_messages
+                            where m.Id.Equals(item.Id)
+                            select new { Id = c.Id, Type = c.Type, Offset = c.Offset };
+
+            var listOut = new List<string>();
+
+            foreach (var tuple in m_contents)
+            {
+                //output value
+                var vOut = this.ParseType(data, tuple.Type, tuple.Offset);
+
+                //add to list not BIN type
+                listOut.Add(vOut.ToString());
+
+                //BitArray to boolArray
+                bool[] boolArray;
+                try
+                {
+                    boolArray = new bool[(vOut as BitArray).Length];
+                    (vOut as BitArray).CopyTo(boolArray, 0);
+                }
+                catch (Exception e)
+                {
+                    continue;
+                }
+
+                var c_binaries = from c in m_contents
+                                 join b in db.Binaries on c.Id equals b.Id_contents
+                                 where c.Id.Equals(tuple.Id)
+                                 select new { Id = b.Id, Type = b.Rule, Length = b.Number_bit };
+
+                //iterator in boolArray
+                int iterator = 0;
+
+                foreach (var tuple1 in c_binaries)
+                {
+                    //boolArray to intArray
+                    var bool_data = boolArray.Skip(iterator).Take(tuple1.Length).ToArray();
+                    int[] int_data = ToIntArray(bool_data);
+
+                    //To String
+                    string value = string.Join("", int_data);
+
+                    //add to list part of BIN type
+                    if (tuple1.Type != null)
+                        listOut.Add(value);
+
+                    //move iterator
+                    iterator += tuple1.Length;
+                }
+            }
+            return listOut;
+        }
+
+        /// <summary>
+        /// Create and return list with data for to draw UI Element, not content values
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        internal List<Tuple<string, string, string>> GetListUIElements(Message item)
+        {
+            var m_contents = from m in db.Messages
+                            join c in db.Contents on m.Id equals c.Id_messages
+                            where m.Id.Equals(item.Id)
+                            select new { Id = c.Id, Title = c.Title, Type = c.Type};
+
+            var list = new List<Tuple<string, string, string>>();
+
+            foreach (var tuple in m_contents)
+            {
+
+                list.Add(new Tuple<string, string, string>(tuple.Title, tuple.Type, tuple.Type));
+
+                var c_binaries = from c in m_contents
+                                 join b in db.Binaries on c.Id equals b.Id_contents
+                                 where c.Id.Equals(tuple.Id)
+                                 select new { Id = b.Id, Title = b.Title, Type = b.Rule, View = b.View };
+
+                foreach (var tuple1 in c_binaries)
+                {
+                    var b_bin_ext = from c in c_binaries
+                                     join b in db.Bins_extended on c.Id equals b.Id_binaries
+                                     where c.Id.Equals(tuple1.Id)
+                                     select b.Text;
+
+                    string text = null;
+                    if (b_bin_ext.Count<string>() != 0)
+                        text = b_bin_ext.First();
+
+                    //add to list part of BIN type
+                    if (tuple1.Title != null)
+                        list.Add(new Tuple<string, string, string>(tuple1.Title, tuple1.View, text));
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Parse element of byte array and return object of a value
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="type"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         private object ParseType(byte[] buffer, string type, int offset)
         {
             object vOut = null;

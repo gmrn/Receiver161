@@ -75,8 +75,11 @@ namespace Receiver161
 
         private void AddNumBlock(string content)
         {
-            var temp = new TextBlock() { Text = content , TextWrapping = TextWrapping.Wrap};
-            this.ui_field.Children.Add(temp);
+
+            var temp = new TextBox() { Text = content, TextWrapping = TextWrapping.Wrap};
+            var border = new Border() { BorderThickness = new Thickness(5) };
+            border.Child = temp;
+            this.ui_field.Children.Add(border);
 
         }
         private void AddCheckBox(string value, string text)

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,6 +16,8 @@ namespace Receiver161
     public partial class FrameContent : UserControl
     {
         ApplicationContext db;
+        bool? IsSaved;
+        Message message;
 
         public FrameContent()
         {
@@ -29,24 +33,46 @@ namespace Receiver161
         //public void ShowEditContent(object sender) { }
         //public void ShowFullContent(object sender) { }
 
-        public void Сompose(object sender)
+        public void Сompose(Message item)
         {
-            var item = (sender as ListViewItem).DataContext as Message;
-            
+            message = item;
             //display a title of framecontent
             textBlock.Text = item.Title;
 
-            //wait response from receiver
-            //byte[] arr = receiver.get()
-            //while show circle load sign
-            byte[] data = new PortServer.Reciever().GetByteData(item.Id);
+            //radialBar.Visibility = Visibility.Visible;
 
-            var list = new PortServer.Decoder().GetValueList(item, data);
+            //var thread = new Thread(
+            //    () =>
+            //    {
+            //        data = ((App)Application.Current).Server.reciever.GetByteData(item.Id_response); // Publish the return value
+            //    });
+            //thread.Start();
+            //thread.Join();
+
+            //new Thread(new ThreadStart(((App)Application.Current).Server.reciever.GetByteData))
+            //var getData = new Task<byte[]>(() =>
+            //{
+            //    return ((App)Application.Current).Server.reciever.GetByteData(item.Id_response);
+            //});
+            //getData.Start();
+        
+            // show load bar
+            //getData.Wait();
+            //remove load bar
+
+            var data = ((App)Application.Current).Server.reciever.GetByteDataTest();
+
+            var list = new PortServer.Decoder().GetListUIElements(item, data);
             this.Show(list);
+
+            //var decoder = new PortServer.Decoder();
+            //var listValues = decoder.GetListValues(item, data);
+            //var listUIElements = decoder.GetListUIElements(item);
+            //this.Show(listUIElements, listValues);
         }
 
         /// <summary>
-        /// fill a body's framecontent  
+        /// Compose and display each elements of a body's framecontent  
         /// </summary>
         /// <param name="list"></param>
         private void Show(List<Tuple<string, string, string, string>> list)
@@ -55,16 +81,53 @@ namespace Receiver161
 
             foreach (var i in list)
             {
-                var contentItem = new ContentItem(){
+                var contentItem = new ContentItem()
+                {
                     title = i.Item1,
                     view = i.Item2,
                     value = i.Item3,
-                    text = i.Item4 };
+                    text = i.Item4
+                };
 
                 contentItem.Compose();
 
                 stackPanel.Children.Add(contentItem);
-                //stackPanel.IsEnabled = false;
+                stackPanel.IsEnabled = false;
+            }
+        }
+
+        private void Show(List<Tuple<string, string, string>> listUIElements, List<string> listValues)
+        {
+            stackPanel.Children.Clear();
+
+            if (!(listValues.Count.Equals(listUIElements.Count)))
+                MessageBox.Show("listValues not equal listUIElements");
+
+            for (int i = 0; i < listValues.Count; i++)
+            {
+                var contentItem = new ContentItem()
+                {
+                    title = listUIElements[i].Item1,
+                    view = listUIElements[i].Item2,
+                    value = listValues[i],
+                    text = listUIElements[i].Item3
+                };
+
+                contentItem.Compose();
+                stackPanel.Children.Add(contentItem);
+            }
+
+            stackPanel.IsEnabled = false;
+        }
+
+        private void Farm()
+        {
+            var listValues = new List<string>();
+            foreach (var item in stackPanel.Children)
+            {
+                var value = (item as ContentItem).ui_field.Children[0] as TextBox;
+                listValues.Add(value.Text);
+                (item as ContentItem).value = null;
             }
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO.Ports;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,10 +14,17 @@ namespace Receiver161
     /// </summary>
     public partial class App : Application
     {
+        public PortServer.Server Server { get; set; }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            //new PortServer.PortServ().Run();
+
+            Server = new PortServer.Server();
+            
+            //launch un new thread the server
+            Task.Factory.StartNew(() => Server.Run());
+
         }
     }
 

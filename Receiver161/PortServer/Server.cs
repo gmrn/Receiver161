@@ -9,42 +9,36 @@ using System.Windows;
 
 namespace Receiver161.PortServer
 {
-    class Server
+    public class Server
     {
-        SerialPort serialPort { get; set; }
-        Transmitter transmitter { get; set; }
+        private SerialPort serialPort { get; set; }
+        public Reciever reciever { get; set; }
+        public Transmitter transmitter { get; set; }
 
+
+        internal SerialPort GetPort() => serialPort;
 
         public void Run()
         {
             serialPort = ChoosePorts();
             setConfig();
-            var reciever = new Reciever(serialPort);
+
+            reciever = new Reciever(serialPort);
             transmitter = new Transmitter(serialPort);
 
             try
             {
                 serialPort.Open();
-
-                while (true)
-                {
-                    serialPort.DataReceived += new SerialDataReceivedEventHandler(reciever.DataReceivedHandler);
-                }
-
-                //var threadReciever = new Thread(new ThreadStart(new Reciever(serialPort).Start));
-                //var threadTransmitter = new Thread(new ThreadStart(new Transmitter(serialPort).Start));
+                serialPort.DataReceived += new SerialDataReceivedEventHandler(reciever.DataReceivedHandler);
             }
             catch (Exception e)
             {
-                MessageBox.Show("ERROR: невозможно открыть порт:");
+                //MessageBox.Show("ERROR: невозможно открыть порт:");
                 return;
             }
 
-
-
+            while (true) { }
         }
-
-
 
         private SerialPort ChoosePorts()
         {
