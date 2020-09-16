@@ -14,7 +14,7 @@ namespace Receiver161.PortServer
     {
         ApplicationContext db;
 
-        public Decoder() => db = new ApplicationContext();
+        public Decoder() => db = ((App)Application.Current).db;
 
         /// <summary>
         /// Create and return list with values and data for to draw UI Element
@@ -25,20 +25,15 @@ namespace Receiver161.PortServer
         internal List<Tuple<string, string, string, string>> GetListUIElements(Message item, byte[] data)
         {
             //get a data for a body's framecontent
-            //LINQ request to db
-            var _contents = from m in db.Messages
-                            join c in db.Contents on m.Id equals c.Id_messages
-                            where m.Id.Equals(item.Id)
-                            select new { Id = c.Id, Title = c.Title, Type = c.Type, Offset = c.Offset };
+            var contents = db.GetContentsForId(item.Id);
 
             //get data in list format
             var list = new List<Tuple<string, string, string, string>>();
 
-            foreach (var tuple in _contents)
+            foreach (var tuple in contents)
             {
                 //output value
                 var vOut = this.ParseType(data, tuple.Type, tuple.Offset);
-
 
                 //add to list not BIN type
                 list.Add(new Tuple<string, string, string, string>(tuple.Title, tuple.Type, vOut.ToString(), tuple.Type));
@@ -55,41 +50,35 @@ namespace Receiver161.PortServer
                     continue;
                 }
 
-                //join tables Contents and Binaries
-                var _contents1 = from c in _contents
-                                 join b in db.Binaries on c.Id equals b.Id_contents
-                                 where c.Id.Equals(tuple.Id)
-                                 select new { Id = b.Id, Title = b.Title, Type = b.Rule, View = b.View, Length = b.Number_bit };
+                //get records from Binaries
+                var binaries = db.GetBinariesForId(tuple.Id);
 
                 //iterator in boolArray
-                int temp_i = 0;
+                int iterator = 0;
 
-                foreach (var temp_t in _contents1)
+                foreach (var tuple1 in binaries)
                 {
                     //boolArray to intArray
-                    var bool_data = boolArray.Skip(temp_i).Take(temp_t.Length).ToArray();
+                    var bool_data = boolArray.Skip(iterator).Take(tuple1.Number_bit).ToArray();
                     int[] int_data = ToIntArray(bool_data);
 
                     //To String
-                    string s = string.Join("", int_data);
+                    string value = string.Join("", int_data);
 
                     //join tables Binaries and Bins_extended
                     //search specific line in union table
-                    var _contents2 = from c in _contents1
-                                     join b in db.Bins_extended on c.Id equals b.Id_binaries
-                                     where c.Id.Equals(temp_t.Id) && b.Data.Equals(s)
-                                     select b.Text;
+                    var bin_ext = db.GetBinExtensionForId(tuple1.Id);
 
                     string text = null;
-                    if (_contents2.Count<string>() != 0)
-                        text = _contents2.First();
+                    if (bin_ext.Count<Bin_extended>() != 0)
+                        text = bin_ext.First().Text;
 
                     //add to list part of BIN type
-                    if (temp_t.Title != null)
-                        list.Add(new Tuple<string, string, string, string>(temp_t.Title, temp_t.View, s, text));
+                    if (tuple1.Title != null)
+                        list.Add(new Tuple<string, string, string, string>(tuple1.Title, tuple1.View, value, text));
 
                     //move iterator
-                    temp_i += temp_t.Length;
+                    iterator += tuple1.Number_bit;
                 }
             }
 
@@ -104,14 +93,10 @@ namespace Receiver161.PortServer
         /// <returns></returns>
         internal List<string> GetListValues(Message item, byte[] data)
         {
-            var m_contents = from m in db.Messages
-                            join c in db.Contents on m.Id equals c.Id_messages
-                            where m.Id.Equals(item.Id)
-                            select new { Id = c.Id, Type = c.Type, Offset = c.Offset };
-
+            var contents = db.GetContentsForId(item.Id);
             var listOut = new List<string>();
 
-            foreach (var tuple in m_contents)
+            foreach (var tuple in contents)
             {
                 //output value
                 var vOut = this.ParseType(data, tuple.Type, tuple.Offset);
@@ -131,29 +116,26 @@ namespace Receiver161.PortServer
                     continue;
                 }
 
-                var c_binaries = from c in m_contents
-                                 join b in db.Binaries on c.Id equals b.Id_contents
-                                 where c.Id.Equals(tuple.Id)
-                                 select new { Id = b.Id, Type = b.Rule, Length = b.Number_bit };
+                var binaries = db.GetBinariesForId(tuple.Id);
 
                 //iterator in boolArray
                 int iterator = 0;
 
-                foreach (var tuple1 in c_binaries)
+                foreach (var tuple1 in binaries)
                 {
                     //boolArray to intArray
-                    var bool_data = boolArray.Skip(iterator).Take(tuple1.Length).ToArray();
+                    var bool_data = boolArray.Skip(iterator).Take(tuple1.Number_bit).ToArray();
                     int[] int_data = ToIntArray(bool_data);
 
                     //To String
                     string value = string.Join("", int_data);
 
                     //add to list part of BIN type
-                    if (tuple1.Type != null)
+                    if (tuple1.Rule != null)
                         listOut.Add(value);
 
                     //move iterator
-                    iterator += tuple1.Length;
+                    iterator += tuple1.Number_bit;
                 }
             }
             return listOut;
@@ -166,39 +148,28 @@ namespace Receiver161.PortServer
         /// <returns></returns>
         internal List<Tuple<string, string, string>> GetListUIElements(Message item)
         {
-            var m_contents = from m in db.Messages
-                            join c in db.Contents on m.Id equals c.Id_messages
-                            where m.Id.Equals(item.Id)
-                            select new { Id = c.Id, Title = c.Title, Type = c.Type};
-
+            var contents = db.GetContentsForId(item.Id);
             var list = new List<Tuple<string, string, string>>();
 
-            foreach (var tuple in m_contents)
+            foreach (var tuple in contents)
             {
-
                 list.Add(new Tuple<string, string, string>(tuple.Title, tuple.Type, tuple.Type));
+                var binaries = db.GetBinariesForId(tuple.Id);
 
-                var c_binaries = from c in m_contents
-                                 join b in db.Binaries on c.Id equals b.Id_contents
-                                 where c.Id.Equals(tuple.Id)
-                                 select new { Id = b.Id, Title = b.Title, Type = b.Rule, View = b.View };
-
-                foreach (var tuple1 in c_binaries)
+                foreach (var tuple1 in binaries)
                 {
-                    var b_bin_ext = from c in c_binaries
-                                     join b in db.Bins_extended on c.Id equals b.Id_binaries
-                                     where c.Id.Equals(tuple1.Id)
-                                     select b.Text;
+                    var bin_ext = db.GetBinExtensionForId(tuple1.Id);
 
                     string text = null;
-                    if (b_bin_ext.Count<string>() != 0)
-                        text = b_bin_ext.First();
+                    if (bin_ext.Count<Bin_extended>() != 0)
+                        text = bin_ext.First().Text;
 
                     //add to list part of BIN type
                     if (tuple1.Title != null)
                         list.Add(new Tuple<string, string, string>(tuple1.Title, tuple1.View, text));
                 }
             }
+
             return list;
         }
 

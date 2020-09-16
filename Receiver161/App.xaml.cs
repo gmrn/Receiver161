@@ -14,11 +14,13 @@ namespace Receiver161
     /// </summary>
     public partial class App : Application
     {
+        public ApplicationContext db;
         public PortServer.Server Server { get; set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            db = new ApplicationContext();
 
             Server = new PortServer.Server();
             
