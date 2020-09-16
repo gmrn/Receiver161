@@ -159,8 +159,9 @@
       <DependentUpon>ToolsPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="db\ApplicationContext.cs" />
-    <Compile Include="Models\Bin_extended.cs" />
     <Compile Include="Models\Binary.cs" />
+    <Compile Include="Models\Response.cs" />
+    <Compile Include="Models\SubContent.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\Content.cs" />
     <Compile Include="Models\Message.cs" />
@@ -172,7 +173,7 @@
   <ItemGroup>
     <Compile Include="PortServer\Decoder.cs" />
     <Compile Include="PortServer\Server.cs" />
-    <Compile Include="PortServer\Reciever.cs" />
+    <Compile Include="PortServer\Receiver.cs" />
     <Compile Include="PortServer\Transmitter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

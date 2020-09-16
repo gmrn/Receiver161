@@ -22,68 +22,68 @@ namespace Receiver161.PortServer
         /// <param name="item"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal List<Tuple<string, string, string, string>> GetListUIElements(Message item, byte[] data)
-        {
-            //get a data for a body's framecontent
-            var contents = db.GetContentsForId(item.Id);
+        //internal List<Tuple<string, string, string, string>> GetListUIElements(Models.Message item, byte[] data)
+        //{
+        //    //get a data for a body's framecontent
+        //    var contents = db.GetContentsForId(item.Id);
 
-            //get data in list format
-            var list = new List<Tuple<string, string, string, string>>();
+        //    //get data in list format
+        //    var list = new List<Tuple<string, string, string, string>>();
 
-            foreach (var tuple in contents)
-            {
-                //output value
-                var vOut = this.ParseType(data, tuple.Type, tuple.Offset);
+        //    foreach (var tuple in contents)
+        //    {
+        //        //output value
+        //        var vOut = this.ParseType(data, tuple.Type, tuple.Offset);
 
-                //add to list not BIN type
-                list.Add(new Tuple<string, string, string, string>(tuple.Title, tuple.Type, vOut.ToString(), tuple.Type));
+        //        //add to list not BIN type
+        //        list.Add(new Tuple<string, string, string, string>(tuple.Title, tuple.Type, vOut.ToString(), tuple.Type));
 
-                //BitArray to boolArray
-                bool[] boolArray;
-                try
-                {
-                    boolArray = new bool[(vOut as BitArray).Length];
-                    (vOut as BitArray).CopyTo(boolArray, 0);
-                }
-                catch (Exception e)
-                {
-                    continue;
-                }
+        //        //BitArray to boolArray
+        //        bool[] boolArray;
+        //        try
+        //        {
+        //            boolArray = new bool[(vOut as BitArray).Length];
+        //            (vOut as BitArray).CopyTo(boolArray, 0);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            continue;
+        //        }
 
-                //get records from Binaries
-                var binaries = db.GetBinariesForId(tuple.Id);
+        //        //get records from Binaries
+        //        var binaries = db.GetBinariesByResponseId(tuple.Id);
 
-                //iterator in boolArray
-                int iterator = 0;
+        //        //iterator in boolArray
+        //        int iterator = 0;
 
-                foreach (var tuple1 in binaries)
-                {
-                    //boolArray to intArray
-                    var bool_data = boolArray.Skip(iterator).Take(tuple1.Number_bit).ToArray();
-                    int[] int_data = ToIntArray(bool_data);
+        //        foreach (var tuple1 in binaries)
+        //        {
+        //            //boolArray to intArray
+        //            var bool_data = boolArray.Skip(iterator).Take(tuple1.Number_bit).ToArray();
+        //            int[] int_data = ToIntArray(bool_data);
 
-                    //To String
-                    string value = string.Join("", int_data);
+        //            //To String
+        //            string value = string.Join("", int_data);
 
-                    //join tables Binaries and Bins_extended
-                    //search specific line in union table
-                    var bin_ext = db.GetBinExtensionForId(tuple1.Id);
+        //            //join tables Binaries and Bins_extended
+        //            //search specific line in union table
+        //            var bin_ext = db.GetBinExtensionForId(tuple1.Id);
 
-                    string text = null;
-                    if (bin_ext.Count<Bin_extended>() != 0)
-                        text = bin_ext.First().Text;
+        //            string text = null;
+        //            if (bin_ext.Count<Bin_extended>() != 0)
+        //                text = bin_ext.First().Text;
 
-                    //add to list part of BIN type
-                    if (tuple1.Title != null)
-                        list.Add(new Tuple<string, string, string, string>(tuple1.Title, tuple1.View, value, text));
+        //            //add to list part of BIN type
+        //            if (tuple1.Title != null)
+        //                list.Add(new Tuple<string, string, string, string>(tuple1.Title, tuple1.View, value, text));
 
-                    //move iterator
-                    iterator += tuple1.Number_bit;
-                }
-            }
+        //            //move iterator
+        //            iterator += tuple1.Number_bit;
+        //        }
+        //    }
 
-            return list;
-        }
+        //    return list;
+        //}
 
         /// <summary>
         /// Decode byte line ane return list with values
@@ -91,12 +91,12 @@ namespace Receiver161.PortServer
         /// <param name="item"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal List<string> GetListValues(Message item, byte[] data)
+        internal List<string> GetListValues(Models.Message item, byte[] data)
         {
-            var contents = db.GetContentsForId(item.Id);
+            var responses = db.GetResponsesById(item.Id);
             var listOut = new List<string>();
 
-            foreach (var tuple in contents)
+            foreach (var tuple in responses)
             {
                 //output value
                 var vOut = this.ParseType(data, tuple.Type, tuple.Offset);
@@ -116,7 +116,7 @@ namespace Receiver161.PortServer
                     continue;
                 }
 
-                var binaries = db.GetBinariesForId(tuple.Id);
+                var binaries = db.GetBinariesByResponseId(tuple.Id);
 
                 //iterator in boolArray
                 int iterator = 0;
@@ -124,7 +124,7 @@ namespace Receiver161.PortServer
                 foreach (var tuple1 in binaries)
                 {
                     //boolArray to intArray
-                    var bool_data = boolArray.Skip(iterator).Take(tuple1.Number_bit).ToArray();
+                    var bool_data = boolArray.Skip(iterator).Take(tuple1.Length).ToArray();
                     int[] int_data = ToIntArray(bool_data);
 
                     //To String
@@ -135,7 +135,7 @@ namespace Receiver161.PortServer
                         listOut.Add(value);
 
                     //move iterator
-                    iterator += tuple1.Number_bit;
+                    iterator += tuple1.Length;
                 }
             }
             return listOut;
@@ -146,32 +146,32 @@ namespace Receiver161.PortServer
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        internal List<Tuple<string, string, string>> GetListUIElements(Message item)
-        {
-            var contents = db.GetContentsForId(item.Id);
-            var list = new List<Tuple<string, string, string>>();
+        //internal List<Tuple<string, string, string>> GetListUIElements(Models.Message item)
+        //{
+        //    var contents = db.GetContentsForId(item.Id);
+        //    var list = new List<Tuple<string, string, string>>();
 
-            foreach (var tuple in contents)
-            {
-                list.Add(new Tuple<string, string, string>(tuple.Title, tuple.Type, tuple.Type));
-                var binaries = db.GetBinariesForId(tuple.Id);
+        //    foreach (var tuple in contents)
+        //    {
+        //        list.Add(new Tuple<string, string, string>(tuple.Title, tuple.Type, tuple.Type));
+        //        var binaries = db.GetBinariesByResponseId(tuple.Id);
 
-                foreach (var tuple1 in binaries)
-                {
-                    var bin_ext = db.GetBinExtensionForId(tuple1.Id);
+        //        foreach (var tuple1 in binaries)
+        //        {
+        //            var bin_ext = db.GetBinExtensionForId(tuple1.Id);
 
-                    string text = null;
-                    if (bin_ext.Count<Bin_extended>() != 0)
-                        text = bin_ext.First().Text;
+        //            string text = null;
+        //            if (bin_ext.Count<Bin_extended>() != 0)
+        //                text = bin_ext.First().Text;
 
-                    //add to list part of BIN type
-                    if (tuple1.Title != null)
-                        list.Add(new Tuple<string, string, string>(tuple1.Title, tuple1.View, text));
-                }
-            }
+        //            //add to list part of BIN type
+        //            if (tuple1.Title != null)
+        //                list.Add(new Tuple<string, string, string>(tuple1.Title, tuple1.View, text));
+        //        }
+        //    }
 
-            return list;
-        }
+        //    return list;
+        //}
 
         /// <summary>
         /// Parse element of byte array and return object of a value

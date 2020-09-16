@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Receiver161.Models
 {
-    [Table("Request")]
-    public class Request
+    [Table("Response")]
+    public class Response
     {
         [Key]
         public int Id { get; set; }

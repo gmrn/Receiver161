@@ -33,42 +33,30 @@ namespace Receiver161
         }
 
         internal void Compose(params string[] param)
-        {
-            //indent from margin submenu for content BIN type 
-            if (char.IsLower(title[0]))
-                textBlock.Margin = new Thickness(20, 0, 0, 0);
-            
+        {            
             //title
             textBlock.Text = title;
             //view and value
-            this.AddUItem();
+            this.AddUIElement();
         }
 
-        private void AddUItem()
+        private void AddUIElement()
         {
             switch (view)
             {
-                case ("radio"):
-                    this.AddRadioButtons();
+                case ("numblock"):
+                    this.AddNumBlock(value);
                     break;
                 case ("check"):
                     this.AddCheckBox(value, text);
                     break;
-                case ("BIN16"):
-                    break;
-                case ("BIN32"):
-                    break;
-                case ("ext"):
-                    this.AddNumBlock(text);
-                    break;
-                case ("DATE"):
+                case ("date"):
                     this.AddDatePicker(value);
                     break;
-                case ("TIME"):
+                case ("time"):
                     this.AddTimePicker(value);
                     break;
                 default:
-                    this.AddNumBlock(value);
                     break;
             }
         }
@@ -86,15 +74,6 @@ namespace Receiver161
         {
             var temp = new CheckBox() { IsChecked = Convert.ToBoolean(Int32.Parse(value)) , Content=text};
             this.ui_field.Children.Add(temp);
-        }
-        private void AddRadioButtons()
-        {
-            var stackPanel1 = new StackPanel();
-
-            for (int i = 0; i < 3; i++)
-                stackPanel1.Children.Add(new RadioButton() { Content = i.ToString() });
-
-            this.ui_field.Children.Add(stackPanel1);
         }
         private void AddDatePicker(string _date)
         {

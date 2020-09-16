@@ -15,44 +15,23 @@ namespace Receiver161
     /// </summary>
     public partial class FrameContent : UserControl
     {
-        ApplicationContext db;
-        bool? IsSaved;
-        Message message;
+        Models.Message message;
 
         public FrameContent()
         {
             InitializeComponent();
-
-            db = new ApplicationContext();
-            db.Messages.Load();
-            db.Contents.Load();
-            this.DataContext = db.Messages.Local.ToBindingList();
         }
 
-        //public void ShowReadContent(object sender) { }
-        //public void ShowEditContent(object sender) { }
-        //public void ShowFullContent(object sender) { }
-
-        public void Сompose(Message item)
+        public void Сompose(Models.Message item)
         {
             message = item;
+            
             //display a title of framecontent
             textBlock.Text = item.Title;
 
-            //radialBar.Visibility = Visibility.Visible;
-
-            //var thread = new Thread(
-            //    () =>
-            //    {
-            //        data = ((App)Application.Current).Server.reciever.GetByteData(item.Id_response); // Publish the return value
-            //    });
-            //thread.Start();
-            //thread.Join();
-
-            //new Thread(new ThreadStart(((App)Application.Current).Server.reciever.GetByteData))
             //var getData = new Task<byte[]>(() =>
             //{
-            //    return ((App)Application.Current).Server.reciever.GetByteData(item.Id_response);
+            //    return ((App)Application.Current).Server.receiver.GetByteData(item.Id_response);
             //});
             //getData.Start();
         
@@ -60,15 +39,20 @@ namespace Receiver161
             //getData.Wait();
             //remove load bar
 
-            var data = ((App)Application.Current).Server.reciever.GetByteDataTest();
+            //var values = ((App)Application.Current).Server.receiver.GetByteDataTest();
+            //var list = new PortServer.Decoder().GetListUIElements(item, values);
 
-            var list = new PortServer.Decoder().GetListUIElements(item, data);
-            this.Show(list);
+            var ui_elements = new List<Tuple<string, string, string>>();
+            var values = new List<string>();
 
-            //var decoder = new PortServer.Decoder();
-            //var listValues = decoder.GetListValues(item, data);
-            //var listUIElements = decoder.GetListUIElements(item);
-            //this.Show(listUIElements, listValues);
+            var db = ((App)Application.Current).db;
+
+            foreach (var tuple in db.GetContentsForId(item.Id))
+            {
+                ui_elements.Add(new Tuple<string, string, string>(tuple.Title, tuple.View, tuple.Meterage));
+            }
+
+            this.Show(ui_elements, values);
         }
 
         /// <summary>
@@ -100,16 +84,16 @@ namespace Receiver161
         {
             stackPanel.Children.Clear();
 
-            if (!(listValues.Count.Equals(listUIElements.Count)))
-                MessageBox.Show("listValues not equal listUIElements");
+            //if (!(listValues.Count.Equals(listUIElements.Count)))
+            //    MessageBox.Show("listValues not equal listUIElements");
 
-            for (int i = 0; i < listValues.Count; i++)
+            for (int i = 0; i < listUIElements.Count; i++)
             {
                 var contentItem = new ContentItem()
                 {
                     title = listUIElements[i].Item1,
                     view = listUIElements[i].Item2,
-                    value = listValues[i],
+                    //value = listValues[i],
                     text = listUIElements[i].Item3
                 };
 

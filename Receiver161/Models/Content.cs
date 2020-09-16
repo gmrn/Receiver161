@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Receiver161
+namespace Receiver161.Models
 {
-    [Table("Contents")]
+    [Table("Content")]
     public class Content
     {
         [Key]
         public int Id { get; set; }
-        public int Id_messages { get; set; }
-        public int Offset { get; set; }
+        public int Id_message { get; set; }
         public string Title { get; set; }
-        public string Type { get; set; }
+        public string View { get; set; }
         public string Meterage { get; set; }
     }
 }

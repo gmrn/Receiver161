@@ -10,24 +10,14 @@ using System.Threading;
 
 namespace Receiver161.PortServer
 {
-    public class Reciever
+    public class Receiver
     {
         private SerialPort port { get; set; }
         private int temp_id { get; set; }
         private byte[] temp_buffer { get; set; }
 
-        delegate void ReceiverHandler();
-        event ReceiverHandler ReceivedMessageWithTempId;
-
-        ApplicationContext db;
-
-
-        public Reciever() { }
-        public Reciever(SerialPort serialPort)
-        {
-            this.port = serialPort;
-            db = new ApplicationContext();
-        }
+        public Receiver() { }
+        public Receiver(SerialPort serialPort) => this.port = serialPort;
 
         public void Start()
         {
@@ -47,8 +37,6 @@ namespace Receiver161.PortServer
 
             if (head_buff[0] == 0x57 && head_buff[1] == 0xf1)
             {
-                //Console.WriteLine("new message!");
-
                 //длина сообщения
                 int lenght = Convert.ToInt32(head_buff[2]);
                 //индетификатор сообщения
@@ -85,28 +73,13 @@ namespace Receiver161.PortServer
             return value_arr;
         }
 
-        internal byte[] GetByteData(Message item)
+        internal byte[] GetByteData(Models.Message item)
         {
-            temp_id = item.Id_response;
-            //send request for get response (table Request)
-            var m_requests = from m in db.Messages
-                             join r in db.Requests on m.Id equals r.Id_message
-                             where m.Id_request.Equals(item.Id_request)
-                             select r.Data;
-
-            string request = null;
-            try
-            {
-                request = m_requests.First();
-            }
-            catch
-            {
-                MessageBox.Show("Not found tuple with specific id");
-            }
+            temp_id = item.Response_number;
 
             while (temp_buffer == null)
             {
-                ((App)Application.Current).Server.transmitter.Send(request);
+                ((App)Application.Current).Server.transmitter.Send(item.Request_data);
                 Thread.Sleep(1000);
             }
 

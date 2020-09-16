@@ -33,7 +33,7 @@
         <ListView x:Name="listView" 
                   BorderThickness="0"
                   Grid.Row="1"
-                  Grid.Column="0" ItemsSource="{Binding}" TabIndex="2147483643">
+                  Grid.Column="0" ItemsSource="{Binding}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock TextWrapping="Wrap"

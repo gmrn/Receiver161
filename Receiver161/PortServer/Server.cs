@@ -12,8 +12,8 @@ namespace Receiver161.PortServer
     public class Server
     {
         private SerialPort serialPort { get; set; }
-        public Reciever reciever { get; set; }
-        public Transmitter transmitter { get; set; }
+        internal Receiver receiver { get; set; }
+        internal Transmitter transmitter { get; set; }
 
 
         internal SerialPort GetPort() => serialPort;
@@ -23,13 +23,13 @@ namespace Receiver161.PortServer
             serialPort = ChoosePorts();
             setConfig();
 
-            reciever = new Reciever(serialPort);
+            receiver = new Receiver(serialPort);
             transmitter = new Transmitter(serialPort);
 
             try
             {
                 serialPort.Open();
-                serialPort.DataReceived += new SerialDataReceivedEventHandler(reciever.DataReceivedHandler);
+                serialPort.DataReceived += new SerialDataReceivedEventHandler(receiver.DataReceivedHandler);
             }
             catch (Exception e)
             {
