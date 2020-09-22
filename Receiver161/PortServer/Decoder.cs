@@ -99,7 +99,7 @@ namespace Receiver161.PortServer
             foreach (var tuple in responses)
             {
                 //output value
-                var vOut = this.ParseType(data, tuple.Type, tuple.Offset);
+                var vOut = this.ParseTypeToValue(data, tuple.Type, tuple.Offset);
 
                 //add to list not BIN type
                 listOut.Add(vOut.ToString());
@@ -173,6 +173,24 @@ namespace Receiver161.PortServer
         //    return list;
         //}
 
+        internal byte[] WrapValuesToByteArray(List<string> values, int id_message)
+        {
+            var legth = db.GetRequestsById(id_message).Count<Models.Request>();
+            var buffer = new byte[legth * 2];
+
+            var enumerator = values.GetEnumerator();
+
+            foreach (var request in db.GetRequestsById(id_message))
+            {
+                var subbuffer = ParseTypeToBytes(ref enumerator, request);
+
+                for (int i = 0; i < subbuffer.Length; i++)
+                    buffer[request.Offset + i] = subbuffer[i];
+            }
+
+            return buffer;
+        }
+
         /// <summary>
         /// Parse element of byte array and return object of a value
         /// </summary>
@@ -180,7 +198,7 @@ namespace Receiver161.PortServer
         /// <param name="type"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
-        private object ParseType(byte[] buffer, string type, int offset)
+        private object ParseTypeToValue(byte[] buffer, string type, int offset)
         {
             object vOut = null;
 
@@ -233,6 +251,59 @@ namespace Receiver161.PortServer
             }
 
             return vOut;
+        }
+
+        /// <summary>
+        /// Translate the value to bytes in accordance with it's type
+        /// </summary>
+        /// <param name="enumerator"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private byte[] ParseTypeToBytes(ref List<string>.Enumerator enumerator, Models.Request request)
+        {
+            var vOut = new byte[0];
+
+            switch (request.Type)
+            {
+                case ("UINT16"):
+                    vOut = BitConverter.GetBytes(
+                        (UInt16.Parse(enumerator.Current)));
+                    break;
+                case ("UINT32"):
+                    vOut = BitConverter.GetBytes(
+                       (UInt32.Parse(enumerator.Current)));
+                    break;
+                case ("SINT16"):
+                    vOut = BitConverter.GetBytes(
+                        (Int16.Parse(enumerator.Current)));
+                    break;
+                case ("SINT32"):
+                    vOut = BitConverter.GetBytes(
+                        (Int32.Parse(enumerator.Current)));
+                    break;
+                case ("FP"):
+                    vOut = BitConverter.GetBytes(
+                        (float.Parse(enumerator.Current)));
+                    break;
+                case ("EFP"):
+                    vOut = BitConverter.GetBytes(
+                        (double.Parse(enumerator.Current)));
+                    break;
+                case ("BIN16"):
+                    //tobitArray(ссылка на лист, указатель на текущее значение)
+                    //toByteArray(bitArray[])
+                    break;
+                case ("BIN32"):
+                    break;
+                case ("TIME"):
+                    break;
+                case ("DATE"):
+                    break;
+                default:
+                    break;
+            }
+            return vOut;
+
         }
 
         private int[] ToIntArray(bool[] data)
