@@ -15,13 +15,14 @@ namespace Receiver161
     /// </summary>
     public partial class FrameContent : UserControl
     {
-        Models.Message message;
+        internal Models.Message message { get; private set; }
 
         public FrameContent()
         {
             InitializeComponent();
         }
 
+        
         public void Сompose(Models.Message item)
         {
             message = item;
@@ -62,6 +63,8 @@ namespace Receiver161
         private void Show(List<Tuple<string, string, string, string>> list)
         {
             stackPanel.Children.Clear();
+            //if (!(listValues.Count.Equals(listUIElements.Count)))
+            //    MessageBox.Show("listValues not equal listUIElements");
 
             foreach (var i in list)
             {
@@ -84,9 +87,6 @@ namespace Receiver161
         {
             stackPanel.Children.Clear();
 
-            //if (!(listValues.Count.Equals(listUIElements.Count)))
-            //    MessageBox.Show("listValues not equal listUIElements");
-
             for (int i = 0; i < listUIElements.Count; i++)
             {
                 var contentItem = new ContentItem()
@@ -101,18 +101,21 @@ namespace Receiver161
                 stackPanel.Children.Add(contentItem);
             }
 
-            stackPanel.IsEnabled = false;
+            //stackPanel.IsEnabled = false;
         }
 
-        private void Farm()
+        /// <summary>
+        /// Get values from each contentItem at frameContent and return list of them
+        /// </summary>
+        /// <returns></returns>
+        internal List<string> ReadValuesFromFrameContent()
         {
-            var listValues = new List<string>();
+            var values = new List<string>();
             foreach (var item in stackPanel.Children)
             {
-                var value = (item as ContentItem).ui_field.Children[0] as TextBox;
-                listValues.Add(value.Text);
-                (item as ContentItem).value = null;
+                values.Add((item as ContentItem).value);
             }
+            return values;
         }
     }
 }

@@ -24,5 +24,14 @@ namespace Receiver161
         {
             InitializeComponent();
         }
+
+        private void SendRequest(object sender, RoutedEventArgs e)
+        {
+            var frm = (this.Parent as Grid).Parent as FrameContent;
+            var values = frm.ReadValuesFromFrameContent();
+            var bytes = new PortServer.Decoder().WrapValuesToBytes(values, frm.message.Id);
+
+            ((App)Application.Current).Server.transmitter.Send(bytes);
+        }
     }
 }

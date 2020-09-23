@@ -173,7 +173,7 @@ namespace Receiver161.PortServer
         //    return list;
         //}
 
-        internal byte[] WrapValuesToByteArray(List<string> values, int id_message)
+        internal byte[] WrapValuesToBytes(List<string> values, int id_message)
         {
             var legth = db.GetRequestsById(id_message).Count<Models.Request>();
             var buffer = new byte[legth * 2];

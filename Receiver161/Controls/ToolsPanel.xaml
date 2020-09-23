@@ -10,7 +10,7 @@
     <ToolBar>
         <Button Margin="5" Content="update"></Button>
         <Button Margin="5" Content="edit"></Button>
-        <Button Margin="5" Content="request"></Button>
+        <Button Margin="5" Content="request" Click="SendRequest"></Button>
         <Button Margin="5" Content="notifications"></Button>
         <Button Margin="5" Content="logger"></Button>
         <Button Margin="5" Content="clear memory"></Button>

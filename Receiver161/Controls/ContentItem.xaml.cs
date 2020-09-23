@@ -34,9 +34,7 @@ namespace Receiver161
 
         internal void Compose(params string[] param)
         {            
-            //title
             textBlock.Text = title;
-            //view and value
             this.AddUIElement();
         }
 
@@ -65,6 +63,7 @@ namespace Receiver161
         {
 
             var temp = new TextBox() { Text = content, TextWrapping = TextWrapping.Wrap};
+            temp.TextChanged += NumBox_ValueChanged; 
             var border = new Border() { BorderThickness = new Thickness(5) };
             border.Child = temp;
             this.ui_field.Children.Add(border);
@@ -95,5 +94,11 @@ namespace Receiver161
             var temp = new SfTimePicker { Value = time, FormatString = "HH:mm:ss" };
             this.ui_field.Children.Add(temp);
         }
+
+        private void NumBox_ValueChanged(object sender, TextChangedEventArgs e)
+        {
+            value = (sender as TextBox).Text;
+        }
     }
 }
+ 
