@@ -57,7 +57,7 @@ namespace Receiver161.PortServer
             //});
         }
 
-        internal byte[] GetByteDataTest()
+        internal byte[] GetByteDataTest154()
         {
 
             byte[] value_arr = {
@@ -69,6 +69,14 @@ namespace Receiver161.PortServer
                 0x6E, 0x89, 0xC4, 0xBE,
                 0x00, 0x00, 0xDE, 0x42,
                 0x00, 0x00, 0xA2, 0x2D };
+
+            return value_arr;
+        }
+
+        internal byte[] GetByteDataTest104()
+        {
+
+            byte[] value_arr = { 0x01, 0x01 };
 
             return value_arr;
         }

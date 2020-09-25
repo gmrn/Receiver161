@@ -88,12 +88,12 @@ namespace Receiver161.PortServer
         /// <summary>
         /// Decode byte line ane return list with values
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="id_message"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal List<string> GetListValues(Models.Message item, byte[] data)
+        internal List<string> GetListValues(int id_message, byte[] data)
         {
-            var responses = db.GetResponsesById(item.Id);
+            var responses = db.GetResponsesById(id_message);
             var listOut = new List<string>();
 
             foreach (var tuple in responses)
@@ -101,8 +101,6 @@ namespace Receiver161.PortServer
                 //output value
                 var vOut = this.ParseTypeToValue(data, tuple.Type, tuple.Offset);
 
-                //add to list not BIN type
-                listOut.Add(vOut.ToString());
 
                 //BitArray to boolArray
                 bool[] boolArray;
@@ -113,6 +111,7 @@ namespace Receiver161.PortServer
                 }
                 catch (Exception e)
                 {
+                    listOut.Add(vOut.ToString());
                     continue;
                 }
 
@@ -121,21 +120,23 @@ namespace Receiver161.PortServer
                 //iterator in boolArray
                 int iterator = 0;
 
-                foreach (var tuple1 in binaries)
+                foreach (var binary in binaries)
                 {
                     //boolArray to intArray
-                    var bool_data = boolArray.Skip(iterator).Take(tuple1.Length).ToArray();
+                    var bool_data = boolArray.Skip(iterator).Take(binary.Length).ToArray();
                     int[] int_data = ToIntArray(bool_data);
+                    Array.Reverse(int_data);
 
                     //To String
                     string value = string.Join("", int_data);
+                    
 
                     //add to list part of BIN type
-                    if (tuple1.Rule != null)
+                    //if (tuple1.Rule != null)
                         listOut.Add(value);
 
                     //move iterator
-                    iterator += tuple1.Length;
+                    iterator += binary.Length;
                 }
             }
             return listOut;
@@ -182,10 +183,13 @@ namespace Receiver161.PortServer
 
             foreach (var request in db.GetRequestsById(id_message))
             {
-                var subbuffer = ParseTypeToBytes(ref enumerator, request);
+                if (enumerator.MoveNext())
+                {
+                    var subbuffer = ParseTypeToBytes(ref enumerator, request);
 
-                for (int i = 0; i < subbuffer.Length; i++)
-                    buffer[request.Offset + i] = subbuffer[i];
+                    for (int i = 0; i < subbuffer.Length; i++)
+                        buffer[request.Offset + i] = subbuffer[i];
+                }
             }
 
             return buffer;
