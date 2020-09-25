@@ -20,6 +20,9 @@ namespace Receiver161
     /// </summary>
     public partial class ToolsPanel : UserControl
     {
+        private FrameContent frm { get
+            { return (this.Parent as Grid).Parent as FrameContent; } }
+
         public ToolsPanel()
         {
             InitializeComponent();
@@ -27,11 +30,15 @@ namespace Receiver161
 
         private void SendRequest(object sender, RoutedEventArgs e)
         {
-            var frm = (this.Parent as Grid).Parent as FrameContent;
             var values = frm.ReadValuesFromFrameContent();
             var bytes = new PortServer.Decoder().WrapValuesToBytes(values, frm.message.Id);
 
             ((App)Application.Current).Server.transmitter.Send(bytes);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            frm.stackPanel.IsEnabled = !(frm.stackPanel.IsEnabled);
         }
     }
 }

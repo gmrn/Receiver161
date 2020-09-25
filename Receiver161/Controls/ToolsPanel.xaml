@@ -9,7 +9,7 @@
 
     <ToolBar>
         <Button Margin="5" Content="update"></Button>
-        <Button Margin="5" Content="edit"></Button>
+        <Button Margin="5" Content="edit" Click="Button_Click"></Button>
         <Button Margin="5" Content="request" Click="SendRequest"></Button>
         <Button Margin="5" Content="notifications"></Button>
         <Button Margin="5" Content="logger"></Button>
